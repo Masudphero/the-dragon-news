@@ -4,13 +4,23 @@ import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        console.log("Logout successful");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div className="flex items-center justify-between">
       
       {/* ইউজারের ইমেইল */}
-      <div className="">{user ? user.email : ""}</div>
+      <div>{user ? user.email : ""}</div>
 
       {/* মেনু */}
       <div className="space-x-5 nav">
@@ -30,7 +40,12 @@ const Navbar = () => {
         </div>
 
         {user ? (
-          <button className="rounded-none btn btn-neutral">Logout</button>
+          <button
+            onClick={handleLogout}
+            className="rounded-none btn btn-neutral"
+          >
+            Logout
+          </button>
         ) : (
           <Link to="/auth/login" className="rounded-none btn btn-neutral">
             Login

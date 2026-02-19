@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { AuthContext } from '../provider/AuthProvider'; // path ঠিক করো
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
 
 const Register = () => {
-
   const { createNewUser, setUser } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
@@ -22,9 +21,20 @@ const Register = () => {
         const user = result.user;
         setUser(user);
         console.log(user);
+
+        alert("✅ Registration successful!");
+        e.target.reset();
       })
       .catch((error) => {
         console.log(error.code, error.message);
+
+        if (error.code === "auth/email-already-in-use") {
+          alert("⚠️ This email is already registered!");
+        } else if (error.code === "auth/weak-password") {
+          alert("⚠️ Password must be at least 6 characters!");
+        } else {
+          alert(error.message);
+        }
       });
   };
 
@@ -49,6 +59,7 @@ const Register = () => {
               type="text"
               name="name"
               placeholder="Enter your name"
+              required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -73,6 +84,7 @@ const Register = () => {
               type="email"
               name="email"
               placeholder="Enter your email"
+              required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -85,6 +97,7 @@ const Register = () => {
               type="password"
               name="password"
               placeholder="Enter your password"
+              required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -100,7 +113,10 @@ const Register = () => {
 
         <p className="mt-5 text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <Link to="/auth/login" className="font-medium text-blue-600 hover:underline">
+          <Link
+            to="/auth/login"
+            className="font-medium text-blue-600 hover:underline"
+          >
             Login
           </Link>
         </p>

@@ -1,7 +1,41 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
 
 const Login = () => {
+  const { signInUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    signInUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log("Login successful", user);
+        alert("✅ Login successful!");
+        form.reset();
+        navigate("/"); // redirect to home page
+      })
+      .catch((error) => {
+        console.log(error.code, error.message);
+
+        if (error.code === "auth/wrong-password") {
+          alert("⚠️ Wrong password!");
+        } else if (error.code === "auth/user-not-found") {
+          alert("⚠️ User not found!");
+        } else if (error.code === "auth/invalid-email") {
+          alert("⚠️ Invalid email address!");
+        } else {
+          alert(error.message);
+        }
+      });
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-100">
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-xl">
@@ -15,7 +49,7 @@ const Login = () => {
         </p>
 
         {/* Form */}
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
 
           {/* Email */}
           <div>
@@ -24,7 +58,9 @@ const Login = () => {
             </label>
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
+              required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -36,7 +72,9 @@ const Login = () => {
             </label>
             <input
               type="password"
+              name="password"
               placeholder="Enter your password"
+              required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>

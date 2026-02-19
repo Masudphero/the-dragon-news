@@ -14,11 +14,11 @@ const HomeLayout = () => {
           <LatestNews></LatestNews>
         </section>
       </header>
-      <nav className="w-11/12 mx-auto py-2">
+      <nav className="w-11/12 py-2 mx-auto">
         <Navbar></Navbar>
       </nav>
-      <main className="w-11/12 mx-auto pt-5 grid md:grid-cols-12 gap-3">
-        <aside className="left col-span-3">
+      <main className="grid w-11/12 gap-3 pt-5 mx-auto md:grid-cols-12">
+        <aside className="col-span-3 left">
           <LeftNavbar></LeftNavbar>
         </aside>
         <section className="col-span-6">
